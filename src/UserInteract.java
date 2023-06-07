@@ -101,9 +101,8 @@ public class UserInteract {
     }
 
     private static void showDataInputDialog() {
-        // 创建属性输入面板
+        // 建立對話框
         DataInputPanel inputPanel = new DataInputPanel();
-        // 创建对话框
         JDialog dialog = new JDialog();
         dialog.setTitle("新增功能");
         dialog.setSize(400, 500);
@@ -111,10 +110,13 @@ public class UserInteract {
         dialog.setModal(true);
         dialog.setLayout(new BorderLayout());
         dialog.add(inputPanel, BorderLayout.CENTER);
+        //要接收資料的物件
+
         // 监听确认按钮点击事件
-        inputPanel.getConfirmButton().addActionListener(new ActionListener() {
+        ActionListener confirmButton=new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e){
+
                 // 获取用户输入的属性值
                 JTextField resourceAgency = inputPanel.getResourceAgencyField();
                 JTextField hospitalName = inputPanel.getHospitalNameField();
@@ -127,10 +129,62 @@ public class UserInteract {
                 JTextField yCoordinate = inputPanel.getyCoordinateField();
                 JTextField notes = inputPanel.getNotesField();
                 JTextField lastUpdateTime = inputPanel.getLastUpdateTimeField();
+                //準備要送入資料庫的物件和其中屬性
+                Mydata newData=new Mydata();
+                if(!resourceAgency.getText().isEmpty()){newData.setResourceAgency(resourceAgency.getText());}
+                if(!hospitalName.getText().isEmpty()){newData.setHospitalName(hospitalName.getText());}
+                if(!phoneNumber.getText().isEmpty()){newData.setPhoneNumber(phoneNumber.getText());}
+                if(!fax.getText().isEmpty()){newData.setFax(Integer.parseInt(fax.getText()));}
+                if(!email.getText().isEmpty()){newData.setEmail(email.getText());}
+                if(!address.getText().isEmpty()){newData.setAddress(address.getText());}
+                if(!website.getText().isEmpty()){newData.setWebsite(website.getText());}
+                if(!xCoordinate.getText().isEmpty()){newData.setxCoordinate(Integer.parseInt(xCoordinate.getText()));}
+                if(!yCoordinate.getText().isEmpty()){newData.setyCoordinate(Integer.parseInt(yCoordinate.getText()));}
+                if(!notes.getText().isEmpty()){newData.setNotes(notes.getText());}
+                if(!lastUpdateTime.getText().isEmpty()){
+                    try {
+                        Date sdf=new SimpleDateFormat("yyyy/MM/dd").parse("lastUpdateTime.getText()");
+                        newData.setLastUpdateTime(sdf);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                //呼叫方法
+                MyDataDAO.insertData(newData);
+
+                /*String sql = "insert into HospitalList(ResourceAgency,HospitalName,PhoneNumber,Fax,Email,Address,Website,xCoordinate,yCoordinate,Notes,LastUpdateTime) values (?,?,?,?,?,?,?,?,?,?,?)";
+                try (Connection conn = ConnectionFactory.getConn();
+                     PreparedStatement pstmt=conn.prepareStatement(sql);) {
+                    //設置每個屬性值到SQL，若沒有值則設為null
+                    if(!resourceAgency.getText().isEmpty()){pstmt.setString(1, resourceAgency.getText());}else {pstmt.setNull(1, Types.NVARCHAR);}
+                    if(!hospitalName.getText().isEmpty()){pstmt.setString(2, hospitalName.getText());}else {pstmt.setNull(2, Types.NVARCHAR);}
+                    if(!phoneNumber.getText().isEmpty()){pstmt.setInt(3, Integer.parseInt(phoneNumber.getText()));}else {pstmt.setNull(3, Types.INTEGER);}
+                    if(!fax.getText().isEmpty()){pstmt.setInt(4, Integer.parseInt(fax.getText()));}else {pstmt.setNull(4, Types.INTEGER);}
+                    if(!email.getText().isEmpty()){pstmt.setString(5, email.getText());}else {pstmt.setNull(5, Types.NVARCHAR);}
+                    if(!address.getText().isEmpty()){pstmt.setString(6, address.getText());}else {pstmt.setNull(6, Types.NVARCHAR);}
+                    if(!website.getText().isEmpty()){pstmt.setString(7, website.getText());}else {pstmt.setNull(7, Types.NVARCHAR);}
+//                    8
+//                    9
+                    if (!lastUpdateTime.getText().isEmpty()) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                        try {
+                            Date convertDate = (Date) sdf.parse(lastUpdateTime.getText());
+                            pstmt.setDate(11, new java.sql.Date(convertDate.getTime()));
+                        } catch (ParseException ex) {
+                            // 处理日期格式不符合要求的情况
+                            ex.printStackTrace();
+                        }
+                    } else {pstmt.setNull(11, Types.DATE);}
+
+                }catch (SQLException ex){
+                    ex.printStackTrace();
+                }*/
                 // 关闭对话框
                 dialog.dispose();
             }
-        });
+        };
+        inputPanel.getConfirmButton().addActionListener(confirmButton);
+        //準備完成並顯示視窗
         dialog.setVisible(true);
     }//顯示MyData相應的屬性輸入視窗
 
