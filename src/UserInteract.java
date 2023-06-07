@@ -1,3 +1,5 @@
+
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -7,8 +9,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+
 public class UserInteract {
     public static void main(String[] args) {
+
+        /*//不要重複調用插入
+        //導入Json
         try (FileInputStream is = new FileInputStream("data/data.json");
              BufferedInputStream bis = new BufferedInputStream(is);
              InputStreamReader isr = new InputStreamReader(bis, StandardCharsets.UTF_8);) {
@@ -54,10 +63,74 @@ public class UserInteract {
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-        }
+        }//導入Json結束
+        */
+
+        System.out.println("導入資料完畢");
+        // 创建主窗口
+        JFrame frame = new JFrame("主選單");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new BorderLayout());
+
+        // 创建选项按钮
+        JButton addButton = new JButton("新增功能");
+        JButton modifyButton = new JButton("修改功能");
+        JButton searchButton = new JButton("根據ID查詢功能");
+        JButton deleteButton = new JButton("根據ID刪除功能");
+
+        // 添加按钮到主窗口
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
+        buttonPanel.add(addButton);
+        buttonPanel.add(modifyButton);
+        buttonPanel.add(searchButton);
+        buttonPanel.add(deleteButton);
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        ActionListener addListener= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showDataInputDialog();
+            }
+        };
+        addButton.addActionListener(addListener);//實作按鈕事件
+
+        frame.setVisible(true);
     }
 
-
+    private static void showDataInputDialog() {
+        // 创建属性输入面板
+        DataInputPanel inputPanel = new DataInputPanel();
+        // 创建对话框
+        JDialog dialog = new JDialog();
+        dialog.setTitle("新增功能");
+        dialog.setSize(400, 500);
+        dialog.setResizable(false);
+        dialog.setModal(true);
+        dialog.setLayout(new BorderLayout());
+        dialog.add(inputPanel, BorderLayout.CENTER);
+        // 监听确认按钮点击事件
+        inputPanel.getConfirmButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 获取用户输入的属性值
+                JTextField resourceAgency = inputPanel.getResourceAgencyField();
+                JTextField hospitalName = inputPanel.getHospitalNameField();
+                JTextField phoneNumber = inputPanel.getPhoneNumberField();
+                JTextField fax = inputPanel.getFaxField();
+                JTextField email = inputPanel.getEmailField();
+                JTextField address = inputPanel.getAddressField();
+                JTextField website = inputPanel.getWebsiteField();
+                JTextField xCoordinate = inputPanel.getxCoordinateField();
+                JTextField yCoordinate = inputPanel.getyCoordinateField();
+                JTextField notes = inputPanel.getNotesField();
+                JTextField lastUpdateTime = inputPanel.getLastUpdateTimeField();
+                // 关闭对话框
+                dialog.dispose();
+            }
+        });
+        dialog.setVisible(true);
+    }//顯示MyData相應的屬性輸入視窗
 
 }
 
