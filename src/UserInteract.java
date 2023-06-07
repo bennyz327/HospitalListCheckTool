@@ -138,6 +138,7 @@ public class UserInteract {
                 if(!email.getText().isEmpty()){newData.setEmail(email.getText());}
                 if(!address.getText().isEmpty()){newData.setAddress(address.getText());}
                 if(!website.getText().isEmpty()){newData.setWebsite(website.getText());}
+                //todo 做數字判斷
                 if(!xCoordinate.getText().isEmpty()){newData.setxCoordinate(Integer.parseInt(xCoordinate.getText()));}
                 if(!yCoordinate.getText().isEmpty()){newData.setyCoordinate(Integer.parseInt(yCoordinate.getText()));}
                 if(!notes.getText().isEmpty()){newData.setNotes(notes.getText());}

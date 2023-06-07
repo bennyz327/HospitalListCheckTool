@@ -32,6 +32,7 @@ public class MyDataDAO {
                 pstmt.setNull(9, Types.INTEGER);
             }
             pstmt.setString(10, mdata.getNotes() != null ? mdata.getNotes() : null);
+            //todo 應該要設定成當下時間
             if(mdata.getLastUpdateTime()!=null) {
                 Date sqldate = new Date(mdata.getLastUpdateTime().getTime());
                 pstmt.setDate(11, sqldate);//將util的Date轉換為sql的Date
@@ -92,6 +93,7 @@ public class MyDataDAO {
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             //若更新日期則嘗試解析格式再導入
+            //todo 當更改時間之外的欄位時也需要更新LastUpdateTime欄位
             if("LastUpdateTime".equals(field)){
                 try{
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
