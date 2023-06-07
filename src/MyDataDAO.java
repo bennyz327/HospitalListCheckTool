@@ -9,18 +9,35 @@ public class MyDataDAO {
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt =conn.prepareStatement(sql)) {
-            pstmt.setString(1,mdata.getResourceAgency());
-            pstmt.setString(2, mdata.getHospitalName());
-            pstmt.setInt(3,mdata.getPhoneNumber());
-            pstmt.setInt(4,mdata.getFax());
-            pstmt.setString(5,mdata.getEmail());
-            pstmt.setString(6,mdata.getAddress());
-            pstmt.setString(7,mdata.getWebsite());
-            pstmt.setInt(8,mdata.getxCoordinate());
-            pstmt.setInt(9,mdata.getyCoordinate());
-            pstmt.setString(10,mdata.getNotes());
-            Date sqldate=new Date(mdata.getLastUpdateTime().getTime());
-            pstmt.setDate(11,sqldate);//將util的Date轉換為sql的Date
+            //每個屬性皆判斷是否空值測試(GPT生成取代原代碼區塊)
+            pstmt.setString(1, mdata.getResourceAgency() != null ? mdata.getResourceAgency() : null);
+            pstmt.setString(2, mdata.getHospitalName() != null ? mdata.getHospitalName() : null);
+            pstmt.setString(3, mdata.getPhoneNumber() != null ? mdata.getPhoneNumber() : null);
+            if (mdata.getFaxInteger() != null) {
+                pstmt.setInt(4, mdata.getFax());
+            } else {
+                pstmt.setNull(4, Types.INTEGER);
+            }
+            pstmt.setString(5, mdata.getEmail() != null ? mdata.getEmail() : null);
+            pstmt.setString(6, mdata.getAddress() != null ? mdata.getAddress() : null);
+            pstmt.setString(7, mdata.getWebsite() != null ? mdata.getWebsite() : null);
+            if (mdata.getxCoordinateInteger() != null) {
+                pstmt.setInt(8, mdata.getxCoordinate());
+            } else {
+                pstmt.setNull(8, Types.INTEGER);
+            }
+            if (mdata.getyCoordinateInteger() != null) {
+                pstmt.setInt(9, mdata.getyCoordinate());
+            } else {
+                pstmt.setNull(9, Types.INTEGER);
+            }
+            pstmt.setString(10, mdata.getNotes() != null ? mdata.getNotes() : null);
+            if(mdata.getLastUpdateTime()!=null) {
+                Date sqldate = new Date(mdata.getLastUpdateTime().getTime());
+                pstmt.setDate(11, sqldate);//將util的Date轉換為sql的Date
+            }else {pstmt.setNull(11, Types.DATE);}
+            //賦值結束
+            //執行SQL
             int count = pstmt.executeUpdate();
             System.out.println(count+"筆資料受到影響");
             return true;
