@@ -3,13 +3,17 @@ public class Mydata {
     Mydata(){super();}
     private String resourceAgency;
     private String hospitalName;
-    private int phoneNumber;
+    private String phoneNumber;
+//    private Integer phoneNumberInteger;
     private int fax;
+    private Integer faxInteger;
     private String email;
     private String address;
     private String website;
     private int xCoordinate;
+    private Integer xCoordinateInteger;
     private int yCoordinate;
+    private Integer yCoordinateInteger;
     private String notes;
     private Date lastUpdateTime;
 
@@ -29,12 +33,13 @@ public class Mydata {
         this.hospitalName = hospitalName;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = String.format("%09d", Long.parseLong(phoneNumber));
+//        this.phoneNumberInteger = phoneNumber;
     }
 
     public int getFax() {
@@ -43,6 +48,7 @@ public class Mydata {
 
     public void setFax(int fax) {
         this.fax = fax;
+        this.faxInteger = fax;
     }
 
     public String getEmail() {
@@ -75,6 +81,7 @@ public class Mydata {
 
     public void setxCoordinate(int xCoordinate) {
         this.xCoordinate = xCoordinate;
+        this.xCoordinateInteger = xCoordinate;
     }
 
     public int getyCoordinate() {
@@ -83,6 +90,7 @@ public class Mydata {
 
     public void setyCoordinate(int yCoordinate) {
         this.yCoordinate = yCoordinate;
+        this.yCoordinateInteger = yCoordinate;
     }
 
     public String getNotes() {
@@ -100,5 +108,20 @@ public class Mydata {
     public void setLastUpdateTime(Date lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
+    //以下Getter用來判斷是否Null
+//    public Integer getPhoneNumberInteger() {
+//        return phoneNumberInteger;
+//    }
 
+    public Integer getFaxInteger() {
+        return faxInteger;
+    }
+
+    public Integer getxCoordinateInteger() {
+        return xCoordinateInteger;
+    }
+
+    public Integer getyCoordinateInteger() {
+        return yCoordinateInteger;
+    }
 }

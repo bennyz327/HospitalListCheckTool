@@ -36,9 +36,9 @@ public class UserInteract {
                 JsonObject jsonObject = jsArr.get(i).getAsJsonObject();
                 mdata.setResourceAgency(jsonObject.get("資源彙整機關").getAsString());
                 mdata.setHospitalName(jsonObject.get("醫院名稱").getAsString());
-                int convertPhone = Integer.parseInt(jsonObject.get("連絡電話").getAsString().replaceAll("[()]", ""));
+                String convertPhone = jsonObject.get("連絡電話").getAsString().replaceAll("[()]", "");
                 mdata.setPhoneNumber(convertPhone);//去除括號轉換成數字
-                //todo 處裡空值
+                //todo 處裡空值 可交由insert判斷?
                 try {
                     int convertFax = Integer.parseInt(jsonObject.get("傳真").getAsString());
                     mdata.setFax(convertFax);//去除括號轉換成數字

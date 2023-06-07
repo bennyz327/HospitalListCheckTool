@@ -53,7 +53,7 @@ public class MyDataDAO {
                 rsMyData = new Mydata();
                 rsMyData.setResourceAgency(rs.getString("ResourceAgency"));
                 rsMyData.setHospitalName(rs.getString("HospitalName"));
-                rsMyData.setPhoneNumber(rs.getInt("PhoneNumber"));
+                rsMyData.setPhoneNumber(rs.getString("PhoneNumber"));
                 rsMyData.setFax(rs.getInt("Fax"));
                 rsMyData.setEmail(rs.getString("Email"));
                 rsMyData.setAddress(rs.getString("Address"));
