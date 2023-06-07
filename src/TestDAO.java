@@ -5,15 +5,17 @@ import java.util.Date;
 public class TestDAO {
     public static void main(String[] args) {
 //        Mydata data1=new Mydata();
-//        data1.setHospitalName("test");
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-//        Date date = null;
+//        data1.setHospitalName("home");
+//        data1.setPhoneNumber("02345678");
+//        System.out.println(data1.getPhoneNumber());
 //        try {
-//            date = sdf.parse("1998/04/23");
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+//            Date date = sdf.parse("1998/04/23");
+//            data1.setLastUpdateTime(date);
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-//        data1.setLastUpdateTime(date);
+
 //        MyDataDAO.insertData(data1);
 
 //        Mydata data2=new Mydata();
@@ -22,7 +24,7 @@ public class TestDAO {
 //            System.out.println(data2.getWebsite());
 //        }
 
-        MyDataDAO.updateData(16,"ResourceAgency","高雄縣政府");
+//        MyDataDAO.updateData(3,"LastUpdateTime","123/01/01");
 
 
     }
