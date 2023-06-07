@@ -1,23 +1,26 @@
 
-import java.awt.event.ActionEvent;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import ConnectionPack.ConnectionFactory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserInteract {
     public static void main(String[] args) {
-
         /*//不要重複調用插入
-        //導入Json
+        //導入Json檔案  //todo 移到DAO
         try (FileInputStream is = new FileInputStream("data/data.json");
              BufferedInputStream bis = new BufferedInputStream(is);
              InputStreamReader isr = new InputStreamReader(bis, StandardCharsets.UTF_8);) {
@@ -46,25 +49,24 @@ public class UserInteract {
                 mdata.setEmail(jsonObject.get("電子郵件").getAsString());
                 mdata.setAddress(jsonObject.get("地址").getAsString());
                 mdata.setWebsite(jsonObject.get("相關網址").getAsString());
-                //todo 處裡空值
+                //todo 處裡空值 可交由insert判斷?
                 try {
                     mdata.setxCoordinate(jsonObject.get("X坐標").getAsInt());
                 }catch (NumberFormatException e){}
-                //todo 處裡空值
+                //todo 處裡空值 可交由insert判斷?
                 try {
                     mdata.setyCoordinate(jsonObject.get("Y坐標").getAsInt());
                 }catch (NumberFormatException e){}
                 mdata.setNotes(jsonObject.get("備註").getAsString());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyy/MM/dd");
-                Date date = sdf.parse(jsonObject.get("最後更新時間").getAsString());
+                java.util.Date date = sdf.parse(jsonObject.get("最後更新時間").getAsString());
                 mdata.setLastUpdateTime(date);//解析時間格式
                 //插入資料庫
                 System.out.println("是否成功插入: "+MyDataDAO.insertData(mdata));
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-        }//導入Json結束
-        */
+        }//導入Json結束*/
 
         System.out.println("導入資料完畢");
         // 创建主窗口
