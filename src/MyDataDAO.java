@@ -1,6 +1,7 @@
 import ConnectionPack.ConnectionFactory;
-
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class MyDataDAO {
     static public boolean insertData(Mydata mdata){
@@ -73,14 +74,23 @@ public class MyDataDAO {
         String sql = "UPDATE HospitalList SET "+field+" = ? WHERE id = ?";
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setObject(1, value);
+            //若更新日期則嘗試解析格式再導入
+            if("LastUpdateTime".equals(field)){
+                try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    java.util.Date convertDate = sdf.parse(value.toString());
+                    pstmt.setObject(1, convertDate);
+                }catch (ParseException e){e.printStackTrace();}}
+            else {
+                pstmt.setObject(1, value);}
             pstmt.setInt(2,id);
+            //執行更新
             int rowsAffected = pstmt.executeUpdate();
             System.out.println("Updated " + rowsAffected + " rows.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }//可更新字串、數字、日期(格式yyyy/MM/dd)
 }
 
 
