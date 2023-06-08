@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class UserInteract {
     public static void main(String[] args) {
- /*        //todo 之後改為讓使用者選擇是否要導入範例資料
+ /*        //todo 之後改為從網路載入
         String path = "data/data.json";
         if(MyDataDAO.readJsonFile(path) != null){
             MyDataDAO.importArrToDatabase(Objects.requireNonNull(MyDataDAO.readJsonFile(path)));
@@ -29,16 +29,20 @@ public class UserInteract {
         // 创建选项按钮
         JButton addButton = new JButton("新增資料");
 
-        JButton modifyButton = new JButton("查詢");
+        JButton searchButton = new JButton("查詢");
+        //修改可更新字串、數字、日期(格式yyyy/MM/dd)
+        JButton updateButton = new JButton("修改");
         //todo 改為依照條件後讓使用者選擇，在查詢頁面也可以新增按鈕讓使用者刪除
         //todo 透過查詢
         JButton deleteButton = new JButton("刪除");
         JButton exportButton = new JButton("導出資料");
 
+
         // 添加按钮到主窗口
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
         buttonPanel.add(addButton);
-        buttonPanel.add(modifyButton);
+        buttonPanel.add(searchButton);
+        buttonPanel.add(updateButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(exportButton);
         frame.add(buttonPanel, BorderLayout.CENTER);
@@ -61,7 +65,7 @@ public class UserInteract {
                 JComboBox<String> comboBox = new JComboBox<>(fieldList.toArray(new String[0]));
                 optionPane.setMessage(new Object[]{"請選擇要用來查詢的欄位", comboBox});
                 optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                JDialog dialog = optionPane.createDialog(null, "修改資料");
+                JDialog dialog = optionPane.createDialog(null, "查詢資料");
                 //顯示視窗
                 dialog.setVisible(true);
                 if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
@@ -83,7 +87,7 @@ public class UserInteract {
                 }
             }
         };//做成查詢功能包含修改跟刪除
-        modifyButton.addActionListener(modifyListener);
+        searchButton.addActionListener(modifyListener);
 
 //導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能
         //todo 讓使用者可以選擇路徑
@@ -117,7 +121,17 @@ public class UserInteract {
             }
         };
         deleteButton.addActionListener(deleteListenner);
-
+//修改功能//修改功能//修改功能//修改功能//修改功能//修改功能//修改功能//修改功能//修改功能
+        ActionListener updateListener= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int id = Integer.parseInt(JOptionPane.showInputDialog(null,"你要修改哪個id的資料?"));
+                String field = JOptionPane.showInputDialog(null,"你要修改哪個欄位?");
+                String value = JOptionPane.showInputDialog(null,"請輸入修改內容");
+                MyDataDAO.updateData(id,field,value);
+            }
+        };
+        updateButton.addActionListener(updateListener);
         frame.setVisible(true);
     }
 
