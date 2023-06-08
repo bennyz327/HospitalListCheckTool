@@ -38,8 +38,14 @@ public class MyDataDAO {
             pstmt.setString(10, mdata.getNotes() != null ? mdata.getNotes() : null);
             //todo 應該要設定成當下時間
             if(mdata.getLastUpdateTime()!=null) {
-                Date sqldate = new Date(mdata.getLastUpdateTime().getTime());
-                pstmt.setDate(11, sqldate);//將util的Date轉換為sql的Date
+                //把UtilDate轉Calendar加1911年之後轉回UtilDate再轉SqlDate
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mdata.getLastUpdateTime());
+                calendar.add(Calendar.YEAR, 1911);
+                java.util.Date adDate = calendar.getTime();
+                Date sqldate = new Date(adDate.getTime());
+
+                pstmt.setDate(11, sqldate);
             }else {pstmt.setNull(11, Types.DATE);}
             //賦值結束
             //執行SQL
@@ -271,6 +277,19 @@ public class MyDataDAO {
             e.printStackTrace();
         }
     }
+/*    static public java.util.Date RocDateStringToAdDate(String str){
+        DateTimeFormatter rocdtf=DateTimeFormatter.ofPattern("yyy/MM/dd");
+        LocalDate rocDate = LocalDate.parse(str, rocdtf);
+        rocDate=rocDate.plusYears(1911);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            java.util.Date adDate = sdf.parse(String.valueOf(rocDate));
+            return adDate;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }*///todo 似乎不會用到
 }
 
 

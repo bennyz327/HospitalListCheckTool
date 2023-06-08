@@ -173,8 +173,13 @@ public class UserInteract {
                 if(!notes.getText().isEmpty()){newData.setNotes(notes.getText());}
                 if(!lastUpdateTime.getText().isEmpty()){
                     try {
-                        Date sdf=new SimpleDateFormat("yyyy/MM/dd").parse("lastUpdateTime.getText()");
-                        newData.setLastUpdateTime(sdf);
+                        //todo 提醒使用者接收的格式為yyyMMdd
+                        DateTimeFormatter rocdtf=DateTimeFormatter.ofPattern("yyyMMdd");
+                        LocalDate rocDate = LocalDate.parse(lastUpdateTime.getText(), rocdtf);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Date adDate = sdf.parse(String.valueOf(rocDate));
+
+                        newData.setLastUpdateTime(adDate);
                     } catch (ParseException ex) {
                         ex.printStackTrace();
                     }
