@@ -1,101 +1,120 @@
-
-import ConnectionPack.ConnectionFactory;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class UserInteract {
     public static void main(String[] args) {
-        /*//不要重複調用插入
-        //導入Json檔案  //todo 移到DAO
-        try (FileInputStream is = new FileInputStream("data/data.json");
-             BufferedInputStream bis = new BufferedInputStream(is);
-             InputStreamReader isr = new InputStreamReader(bis, StandardCharsets.UTF_8);) {
-            // 讀取 JSON 檔案
-            StringBuilder jsonBuilder = new StringBuilder();
-            int datastream;
-            while ((datastream = isr.read()) != -1) {
-                jsonBuilder.append((char) datastream);
-            }
-            String importJsonContent = jsonBuilder.toString();
-            String jsonContent = importJsonContent.replaceAll("[\\n\\r\\t\\s\\u00A0]", "");
-            //解析JSON檔案
-            JsonArray jsArr = JsonParser.parseString(jsonContent).getAsJsonArray();
-            Mydata mdata = new Mydata();
-            for (int i = 0; i < jsArr.size(); i++) {
-                JsonObject jsonObject = jsArr.get(i).getAsJsonObject();
-                mdata.setResourceAgency(jsonObject.get("資源彙整機關").getAsString());
-                mdata.setHospitalName(jsonObject.get("醫院名稱").getAsString());
-                String convertPhone = jsonObject.get("連絡電話").getAsString().replaceAll("[()]", "");
-                mdata.setPhoneNumber(convertPhone);//去除括號轉換成數字
-                //todo 處裡空值 可交由insert判斷?
-                try {
-                    int convertFax = Integer.parseInt(jsonObject.get("傳真").getAsString());
-                    mdata.setFax(convertFax);//去除括號轉換成數字
-                }catch (NumberFormatException e){}
-                mdata.setEmail(jsonObject.get("電子郵件").getAsString());
-                mdata.setAddress(jsonObject.get("地址").getAsString());
-                mdata.setWebsite(jsonObject.get("相關網址").getAsString());
-                //todo 處裡空值 可交由insert判斷?
-                try {
-                    mdata.setxCoordinate(jsonObject.get("X坐標").getAsInt());
-                }catch (NumberFormatException e){}
-                //todo 處裡空值 可交由insert判斷?
-                try {
-                    mdata.setyCoordinate(jsonObject.get("Y坐標").getAsInt());
-                }catch (NumberFormatException e){}
-                mdata.setNotes(jsonObject.get("備註").getAsString());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyy/MM/dd");
-                java.util.Date date = sdf.parse(jsonObject.get("最後更新時間").getAsString());
-                mdata.setLastUpdateTime(date);//解析時間格式
-                //插入資料庫
-                System.out.println("是否成功插入: "+MyDataDAO.insertData(mdata));
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }//導入Json結束*/
+        /* //todo 之後改為讓使用者選擇是否要導入範例資料
+        String path = "data/data.json";
+        if(MyDataDAO.readJsonFile(path) != null){
+            MyDataDAO.importArrToDatabase(Objects.requireNonNull(MyDataDAO.readJsonFile(path)));
+            System.out.println("導入資料完畢");
+        }else {System.out.println("無法導入資料庫");}
+        */
 
-        System.out.println("導入資料完畢");
-        // 创建主窗口
+        //GUI
+        //创建主窗口
         JFrame frame = new JFrame("主選單");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(new BorderLayout());
 
         // 创建选项按钮
-        JButton addButton = new JButton("新增功能");
-        JButton modifyButton = new JButton("修改功能");
-        JButton searchButton = new JButton("根據ID查詢功能");
-        JButton deleteButton = new JButton("根據ID刪除功能");
+        JButton addButton = new JButton("新增資料");
+
+        JButton modifyButton = new JButton("查詢");
+        //todo 改為依照條件後讓使用者選擇，在查詢頁面也可以新增按鈕讓使用者刪除
+        //todo 透過查詢
+        JButton deleteButton = new JButton("刪除");
+        JButton exportButton = new JButton("導出資料");
 
         // 添加按钮到主窗口
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 1));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
         buttonPanel.add(addButton);
         buttonPanel.add(modifyButton);
-        buttonPanel.add(searchButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(exportButton);
         frame.add(buttonPanel, BorderLayout.CENTER);
-
+//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能
         ActionListener addListener= new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showDataInputDialog();
             }
+        };//實作按鈕事件
+        addButton.addActionListener(addListener);//監聽按鈕事件
+//查詢功能//查詢功能//查詢功能//查詢功能//查詢功能//查詢功能//查詢功能//查詢功能//查詢功能
+        ActionListener modifyListener= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> fieldList = MyDataDAO.getColumnList("HospitalList");//呼叫DAO獲得欄位清單
+                //篩選可用來查詢的
+                //建立視窗
+                JOptionPane optionPane = new JOptionPane();
+                JComboBox<String> comboBox = new JComboBox<>(fieldList.toArray(new String[0]));
+                optionPane.setMessage(new Object[]{"請選擇要用來查詢的欄位", comboBox});
+                optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+                JDialog dialog = optionPane.createDialog(null, "修改資料");
+                //顯示視窗
+                dialog.setVisible(true);
+                if (optionPane.getValue() != null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+                    try {
+                        String selectedFieldName = Objects.requireNonNull(comboBox.getSelectedItem()).toString();   //获取用户选择的字段名称
+                        System.out.println(selectedFieldName);
+                        String key = JOptionPane.showInputDialog(null,"請輸入查詢關鍵字");
+                        System.out.println(key);
+                        List<Mydata> rsList = MyDataDAO.selectDataByColumn(selectedFieldName,key);
+                        if(!rsList.isEmpty()){
+                            System.out.println("有資料");;new DataShowTable(rsList);
+                        }else {
+                            JOptionPane.showMessageDialog(dialog, "查無資料！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                            dialog.dispose();
+                        }
+                    }catch (NullPointerException ne){System.out.println("選擇欄位為空");}
+                    //顯示輸入框
+                }
+            }
+        };//做成查詢功能包含修改跟刪除
+        modifyButton.addActionListener(modifyListener);
+
+//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能
+        //todo 讓使用者可以選擇路徑
+        ActionListener exportListenner= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int option = JOptionPane.showConfirmDialog(null, "確定要導出資料嗎？", "確認", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                System.out.println("下令");
+                MyDataDAO.exportAllDataToJsonfile("HospitalList");
+                System.out.println("完成");}
+            }
         };
-        addButton.addActionListener(addListener);//實作按鈕事件
+        exportButton.addActionListener(exportListenner);
+//刪除功能//刪除功能//刪除功能//刪除功能//刪除功能//刪除功能//刪除功能//刪除功能//刪除功能
+        ActionListener deleteListenner= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> FiledList = MyDataDAO.getFiledList("HospitalList","HospitalName");
+                JOptionPane deleteoptionPane = new JOptionPane();
+                JComboBox<String> comboBox = new JComboBox<>(FiledList.toArray(new String[0]));
+                deleteoptionPane.setMessage(new Object[]{"請選擇要刪除的資料", comboBox});
+                deleteoptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+                JDialog dialog = deleteoptionPane.createDialog(null, "刪除資料");
+                //顯示視窗
+                dialog.setVisible(true);
+                if (deleteoptionPane.getValue() != null && deleteoptionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+                    System.out.println(comboBox.getSelectedItem());
+                    MyDataDAO.deleteDataByName((String) comboBox.getSelectedItem());
+                }
+            }
+        };
+        deleteButton.addActionListener(deleteListenner);
 
         frame.setVisible(true);
     }
@@ -110,8 +129,6 @@ public class UserInteract {
         dialog.setModal(true);
         dialog.setLayout(new BorderLayout());
         dialog.add(inputPanel, BorderLayout.CENTER);
-        //要接收資料的物件
-
         // 监听确认按钮点击事件
         ActionListener confirmButton=new ActionListener() {
             @Override
@@ -133,8 +150,18 @@ public class UserInteract {
                 Mydata newData=new Mydata();
                 if(!resourceAgency.getText().isEmpty()){newData.setResourceAgency(resourceAgency.getText());}
                 if(!hospitalName.getText().isEmpty()){newData.setHospitalName(hospitalName.getText());}
-                if(!phoneNumber.getText().isEmpty()){newData.setPhoneNumber(phoneNumber.getText());}
-                if(!fax.getText().isEmpty()){newData.setFax(Integer.parseInt(fax.getText()));}
+                if(!phoneNumber.getText().isEmpty()){
+                    if(phoneNumber.getText().matches("\\(?(0[2345678])\\)?[-.\\s]?\\d{7,8}")){
+                        newData.setPhoneNumber(phoneNumber.getText());
+                    }else {
+                        JOptionPane.showMessageDialog(dialog, "電話號碼格式不正確！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                        dialog.dispose();// 關閉當前對話框，重新開啟新的對話框
+                        showDataInputDialog();
+                        return;
+                    }
+                }
+
+                if(!fax.getText().isEmpty()){newData.setFax(fax.getText());}
                 if(!email.getText().isEmpty()){newData.setEmail(email.getText());}
                 if(!address.getText().isEmpty()){newData.setAddress(address.getText());}
                 if(!website.getText().isEmpty()){newData.setWebsite(website.getText());}
@@ -183,11 +210,18 @@ public class UserInteract {
                 // 关闭对话框
                 dialog.dispose();
             }
+        };//todo 可以提取"從輸入視窗獲取使用者資料的實作"
+        ActionListener cancelButton=new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
         };
         inputPanel.getConfirmButton().addActionListener(confirmButton);
+        inputPanel.getCancelButton().addActionListener(cancelButton);
         //準備完成並顯示視窗
         dialog.setVisible(true);
-    }//顯示MyData相應的屬性輸入視窗
+    }//屬性輸入視窗 todo 分割出去成單獨class
 
 }
 
