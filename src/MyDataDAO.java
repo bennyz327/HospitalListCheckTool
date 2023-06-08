@@ -13,11 +13,7 @@ public class MyDataDAO {
             pstmt.setString(1, mdata.getResourceAgency() != null ? mdata.getResourceAgency() : null);
             pstmt.setString(2, mdata.getHospitalName() != null ? mdata.getHospitalName() : null);
             pstmt.setString(3, mdata.getPhoneNumber() != null ? mdata.getPhoneNumber() : null);
-            if (mdata.getFaxInteger() != null) {
-                pstmt.setInt(4, mdata.getFax());
-            } else {
-                pstmt.setNull(4, Types.INTEGER);
-            }
+            pstmt.setString(4, mdata.getFax() != null ? mdata.getFax() : null);
             pstmt.setString(5, mdata.getEmail() != null ? mdata.getEmail() : null);
             pstmt.setString(6, mdata.getAddress() != null ? mdata.getAddress() : null);
             pstmt.setString(7, mdata.getWebsite() != null ? mdata.getWebsite() : null);
@@ -72,7 +68,7 @@ public class MyDataDAO {
                 rsMyData.setResourceAgency(rs.getString("ResourceAgency"));
                 rsMyData.setHospitalName(rs.getString("HospitalName"));
                 rsMyData.setPhoneNumber(rs.getString("PhoneNumber"));
-                rsMyData.setFax(rs.getInt("Fax"));
+                rsMyData.setFax(rs.getString("Fax"));
                 rsMyData.setEmail(rs.getString("Email"));
                 rsMyData.setAddress(rs.getString("Address"));
                 rsMyData.setWebsite(rs.getString("Website"));

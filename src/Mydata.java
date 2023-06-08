@@ -5,17 +5,19 @@ public class Mydata {
     private String hospitalName;
     private String phoneNumber;
 //    private Integer phoneNumberInteger;
-    private int fax;
-    private Integer faxInteger;
+    private String fax;
+//    private Integer faxInteger;
     private String email;
     private String address;
     private String website;
     private int xCoordinate;
-    private Integer xCoordinateInteger;
+
     private int yCoordinate;
-    private Integer yCoordinateInteger;
+
     private String notes;
     private Date lastUpdateTime;
+    private Integer xCoordinateInteger;
+    private Integer yCoordinateInteger;
 
     public String getResourceAgency() {
         return resourceAgency;
@@ -38,17 +40,16 @@ public class Mydata {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = String.format("%09d", Long.parseLong(phoneNumber));
+        this.phoneNumber = phoneNumber;
 //        this.phoneNumberInteger = phoneNumber;
     }
 
-    public int getFax() {
+    public String getFax() {
         return fax;
     }
 
-    public void setFax(int fax) {
+    public void setFax(String fax) {
         this.fax = fax;
-        this.faxInteger = fax;
     }
 
     public String getEmail() {
@@ -112,10 +113,9 @@ public class Mydata {
 //    public Integer getPhoneNumberInteger() {
 //        return phoneNumberInteger;
 //    }
-
-    public Integer getFaxInteger() {
-        return faxInteger;
-    }
+//    public Integer getFaxInteger() {
+//        return faxInteger;
+//    }
 
     public Integer getxCoordinateInteger() {
         return xCoordinateInteger;
