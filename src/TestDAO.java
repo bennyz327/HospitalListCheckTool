@@ -1,6 +1,9 @@
+import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TestDAO {
     public static void main(String[] args) {
@@ -25,6 +28,14 @@ public class TestDAO {
 //        }
 
 //        MyDataDAO.updateData(3,"LastUpdateTime","123/01/01");
+        JOptionPane optionPane = new JOptionPane();
+        List<String> fieldList=new ArrayList<>();
+        fieldList.add("A");
+        fieldList.add("B");
+        fieldList.add("C");
+        for (String s : fieldList) {
+            System.out.println(s);
+        }
 
 
     }
