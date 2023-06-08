@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class UserInteract {
     public static void main(String[] args) {
- /*        //todo 之後改為從網路載入
+ /*        //todo 從網路載入
         String path = "data/data.json";
         if(MyDataDAO.readJsonFile(path) != null){
             MyDataDAO.importArrToDatabase(Objects.requireNonNull(MyDataDAO.readJsonFile(path)));
@@ -88,7 +88,6 @@ public class UserInteract {
             }
         };//做成查詢功能包含修改跟刪除
         searchButton.addActionListener(modifyListener);
-
 //導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能//導出功能
         //todo 讓使用者可以選擇路徑
         ActionListener exportListenner= new ActionListener() {
@@ -134,7 +133,6 @@ public class UserInteract {
         updateButton.addActionListener(updateListener);
         frame.setVisible(true);
     }
-
     private static void showDataInputDialog() {
         // 建立對話框
         DataInputPanel inputPanel = new DataInputPanel();
