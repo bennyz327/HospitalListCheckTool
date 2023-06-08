@@ -4,20 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class UserInteract {
     public static void main(String[] args) {
-        /* //todo 之後改為讓使用者選擇是否要導入範例資料
+ /*        //todo 之後改為讓使用者選擇是否要導入範例資料
         String path = "data/data.json";
         if(MyDataDAO.readJsonFile(path) != null){
             MyDataDAO.importArrToDatabase(Objects.requireNonNull(MyDataDAO.readJsonFile(path)));
             System.out.println("導入資料完畢");
         }else {System.out.println("無法導入資料庫");}
-        */
-
+*/
         //GUI
         //创建主窗口
         JFrame frame = new JFrame("主選單");
@@ -71,7 +72,8 @@ public class UserInteract {
                         System.out.println(key);
                         List<Mydata> rsList = MyDataDAO.selectDataByColumn(selectedFieldName,key);
                         if(!rsList.isEmpty()){
-                            System.out.println("有資料");;new DataShowTable(rsList);
+                            System.out.println("有資料");
+                            new DataShowTable(rsList);
                         }else {
                             JOptionPane.showMessageDialog(dialog, "查無資料！", "錯誤", JOptionPane.ERROR_MESSAGE);
                             dialog.dispose();
