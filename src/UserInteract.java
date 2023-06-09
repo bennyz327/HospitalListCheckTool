@@ -46,7 +46,7 @@ public class UserInteract {
         ActionListener addListener= new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showDataInputDialog();
+                DataInputPanel.showDataInputDialog();
             }
         };//實作按鈕事件
         addButton.addActionListener(addListener);//監聽按鈕事件
@@ -136,7 +136,7 @@ public class UserInteract {
                 JComboBox<String> comboBox = new JComboBox<>(modifyList.toArray(new String[0]));
                 modifyOptionPanel.setMessage(new Object[]{"請選擇要修改的資料", comboBox});
                 modifyOptionPanel.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                JDialog modifydialog = modifyOptionPanel.createDialog(null, "刪除資料");
+                JDialog modifydialog = modifyOptionPanel.createDialog(null, "修改資料");
                 modifydialog.setVisible(true);
                 if (modifyOptionPanel.getValue() != null && modifyOptionPanel.getValue().equals(JOptionPane.OK_OPTION)) {
                     //設定要修改的資料欄位
@@ -145,14 +145,42 @@ public class UserInteract {
                     List<String> updateFieldList = MyDataDAO.getAllColumnList("HospitalList");//呼叫DAO獲得欄位清單
                     JOptionPane fieldOptionPane = new JOptionPane();
                     JComboBox<String> fieldComboBox = new JComboBox<>(updateFieldList.toArray(new String[0]));
-                    fieldOptionPane.setMessage(new Object[]{"請選擇要用來查詢的欄位", fieldComboBox});
+                    fieldOptionPane.setMessage(new Object[]{"請選擇要修改的欄位", fieldComboBox});
                     fieldOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-                    JDialog fieldOptiondialog = fieldOptionPane.createDialog(null, "查詢資料");
+                    JDialog fieldOptiondialog = fieldOptionPane.createDialog(null, "修改資料");
                     fieldOptiondialog.setVisible(true);//顯示視窗
                     if (fieldOptionPane.getValue() != null && fieldOptionPane.getValue().equals(JOptionPane.OK_OPTION)) {
                         String selectField = Objects.requireNonNull(fieldComboBox.getSelectedItem()).toString();
-                        String value = JOptionPane.showInputDialog(null,"請輸入修改內容");
-                        MyDataDAO.updateData(selectDataName,selectField,value);
+                        //準備取得使用者要修改的值
+                        //如果選擇特定欄位// 判斷電話、日期格式、持續要求使用者輸入正確格式
+                        String value = null;
+                            if (selectField.equals("PhoneNumber")) {
+                                // 判斷電話格式
+                                boolean phoneNumberNotOK = true;
+                                while (phoneNumberNotOK){
+                                    value = JOptionPane.showInputDialog(null,"請輸入電話");
+                                    if (!value.matches("\\(?(0[2345678])\\)?[-.\\s]?\\d{7,8}")) {
+                                        JOptionPane.showMessageDialog(null, "電話號碼格式不正確！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                                    }else {phoneNumberNotOK=false;}
+                                }
+                                MyDataDAO.updateData(selectDataName,selectField,value);
+                            } else
+                            if (selectField.equals("LastUpdateTime")) {
+                            // 判斷日期格式
+                                boolean lastUpdateTimeNotOK = true;
+                                while (lastUpdateTimeNotOK){
+                                    value = JOptionPane.showInputDialog(null,"請輸入日期!");
+                                    if (!value.matches("\\d{7}")) {
+                                        JOptionPane.showMessageDialog(null, "日期格式不正確！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                                    }else {lastUpdateTimeNotOK=false;}
+                                }
+                                MyDataDAO.updateData(selectDataName,selectField,value);
+                            }else {
+                                //若是其他字串欄位
+                                value = JOptionPane.showInputDialog(null,"請輸入修改內容");
+                                //送出內容
+                                MyDataDAO.updateData(selectDataName,selectField,value);
+                            }
                     }
                 }
 
@@ -162,71 +190,6 @@ public class UserInteract {
         //顯示主選單
         frame.setVisible(true);
     }
-    private static void showDataInputDialog() {
-        // 建立對話框
-        DataInputPanel inputPanel = new DataInputPanel();
-        JDialog dialog = new JDialog();
-        dialog.setTitle("新增功能");
-        dialog.setSize(400, 500);
-        dialog.setResizable(false);
-        dialog.setModal(true);
-        dialog.setLayout(new BorderLayout());
-        dialog.add(inputPanel, BorderLayout.CENTER);
-        // 监听确认按钮点击事件
-        ActionListener confirmButton=new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-
-                // 获取用户输入的属性值
-                JTextField resourceAgency = inputPanel.getResourceAgencyField();
-                JTextField hospitalName = inputPanel.getHospitalNameField();
-                JTextField phoneNumber = inputPanel.getPhoneNumberField();
-                JTextField fax = inputPanel.getFaxField();
-                JTextField email = inputPanel.getEmailField();
-                JTextField address = inputPanel.getAddressField();
-                JTextField website = inputPanel.getWebsiteField();
-                JTextField xCoordinate = inputPanel.getxCoordinateField();
-                JTextField yCoordinate = inputPanel.getyCoordinateField();
-                JTextField notes = inputPanel.getNotesField();
-                JTextField lastUpdateTime = inputPanel.getLastUpdateTimeField();
-                //準備要送入資料庫的物件和其中屬性
-                Mydata newData=new Mydata();
-                if(!resourceAgency.getText().isEmpty()){newData.setResourceAgency(resourceAgency.getText());}
-                if(!hospitalName.getText().isEmpty()){newData.setHospitalName(hospitalName.getText());}
-                if(!phoneNumber.getText().isEmpty()){
-                    if(phoneNumber.getText().matches("\\(?(0[2345678])\\)?[-.\\s]?\\d{7,8}")){
-                        newData.setPhoneNumber(phoneNumber.getText());
-                    }else {
-                        JOptionPane.showMessageDialog(dialog, "電話號碼格式不正確！", "錯誤", JOptionPane.ERROR_MESSAGE);
-                        dialog.dispose();// 關閉當前對話框，重新開啟新的對話框
-                        showDataInputDialog();
-                        return;
-                    }
-                }
-
-                if(!fax.getText().isEmpty()){newData.setFax(fax.getText());}
-                if(!email.getText().isEmpty()){newData.setEmail(email.getText());}
-                if(!address.getText().isEmpty()){newData.setAddress(address.getText());}
-                if(!website.getText().isEmpty()){newData.setWebsite(website.getText());}
-                //todo 做數字判斷
-                if(!xCoordinate.getText().isEmpty()){newData.setxCoordinate(Integer.parseInt(xCoordinate.getText()));}
-                if(!yCoordinate.getText().isEmpty()){newData.setyCoordinate(Integer.parseInt(yCoordinate.getText()));}
-                if(!notes.getText().isEmpty()){newData.setNotes(notes.getText());}
-                if(!lastUpdateTime.getText().isEmpty()){
-                    try {
-                        //todo 提醒使用者接收的格式為yyyMMdd
-                        DateTimeFormatter rocdtf=DateTimeFormatter.ofPattern("yyyMMdd");
-                        LocalDate rocDate = LocalDate.parse(lastUpdateTime.getText(), rocdtf);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date adDate = sdf.parse(String.valueOf(rocDate));
-
-                        newData.setLastUpdateTime(adDate);
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                //呼叫方法
-                MyDataDAO.insertData(newData);
 
                 /*String sql = "insert into HospitalList(ResourceAgency,HospitalName,PhoneNumber,Fax,Email,Address,Website,xCoordinate,yCoordinate,Notes,LastUpdateTime) values (?,?,?,?,?,?,?,?,?,?,?)";
                 try (Connection conn = ConnectionFactory.getConn();
@@ -254,22 +217,6 @@ public class UserInteract {
 
                 }catch (SQLException ex){
                     ex.printStackTrace();
-                }*/
-                // 关闭对话框
-                dialog.dispose();
-            }
-        };//todo 可以提取"從輸入視窗獲取使用者資料的實作"
-        ActionListener cancelButton=new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
-        };
-        inputPanel.getConfirmButton().addActionListener(confirmButton);
-        inputPanel.getCancelButton().addActionListener(cancelButton);
-        //準備完成並顯示視窗
-        dialog.setVisible(true);
-    }//全屬性的輸入視窗 todo 分割出去成單獨class
-
+                }*///無用
 }
 
