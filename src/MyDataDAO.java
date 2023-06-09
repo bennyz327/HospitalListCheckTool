@@ -142,7 +142,8 @@ public class MyDataDAO {
         }catch (SQLException e){e.printStackTrace();return null;}
     }
     static public void updateData(String selectDataName,String field,Object value){
-        String sql = "UPDATE HospitalList SET "+field+" = ? WHERE HospitalName = ?";
+        String replaceField = field.replaceAll("[;\"'{}\\[\\]]", "");
+        String sql = "UPDATE HospitalList SET "+replaceField+" = ? WHERE HospitalName = ?";
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             //若更新日期則嘗試解析格式再導入
@@ -303,6 +304,7 @@ public class MyDataDAO {
         }
         return null;
     }*///todo 似乎不會用到
+//String replaceField = field.replaceAll("[;\"'{}\\[\\]]", "");// 過濾用語句
 }
 
 
