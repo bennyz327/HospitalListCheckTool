@@ -225,7 +225,22 @@ public class MyDataDAO {
         }
 
         return columnNames;
-    }
+    }//只返回某資料表的"資料彙整機關"、"醫院名稱"、"地址"
+    static public List<String> getAllColumnList(String tableName) {
+        List<String> columnNames = new ArrayList<>();
+        try (Connection conn = ConnectionFactory.getConn()) {
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet rs = metaData.getColumns(null, null, tableName, null);
+            while (rs.next()) {
+                String columnName = rs.getString("COLUMN_NAME");
+                if(!"id".equals(columnName)){columnNames.add(columnName);}
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return columnNames;
+    }//返回某資料表全部欄位(除了id)
     static public List<String> getFiledList(String tableName, String feildName){
         List<String> FiledList = new ArrayList<>();
         String sql = "SELECT "+feildName+" FROM "+tableName;

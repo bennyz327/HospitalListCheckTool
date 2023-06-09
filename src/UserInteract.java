@@ -124,13 +124,36 @@ public class UserInteract {
         ActionListener updateListener= new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = Integer.parseInt(JOptionPane.showInputDialog(null,"你要修改哪個id的資料?"));
-                String field = JOptionPane.showInputDialog(null,"你要修改哪個欄位?");
-                String value = JOptionPane.showInputDialog(null,"請輸入修改內容");
-                MyDataDAO.updateData(id,field,value);
+                //選擇資料的下拉清單
+                List<String> modifyList = MyDataDAO.getFiledList("HospitalList","HospitalName");
+                JOptionPane modifyOptionPanel = new JOptionPane();
+                JComboBox<String> comboBox = new JComboBox<>(modifyList.toArray(new String[0]));
+                modifyOptionPanel.setMessage(new Object[]{"請選擇要修改的資料", comboBox});
+                modifyOptionPanel.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+                JDialog modifydialog = modifyOptionPanel.createDialog(null, "刪除資料");
+                modifydialog.setVisible(true);
+                if (modifyOptionPanel.getValue() != null && modifyOptionPanel.getValue().equals(JOptionPane.OK_OPTION)) {
+                    //設定要修改的資料欄位
+                    String selectDataName = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+                    //顯示修改欄位的下拉清單
+                    List<String> updateFieldList = MyDataDAO.getAllColumnList("HospitalList");//呼叫DAO獲得欄位清單
+                    JOptionPane fieldOptionPane = new JOptionPane();
+                    JComboBox<String> fieldComboBox = new JComboBox<>(updateFieldList.toArray(new String[0]));
+                    fieldOptionPane.setMessage(new Object[]{"請選擇要用來查詢的欄位", fieldComboBox});
+                    fieldOptionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+                    JDialog fieldOptiondialog = fieldOptionPane.createDialog(null, "查詢資料");
+                    fieldOptiondialog.setVisible(true);//顯示視窗
+                    if (fieldOptionPane.getValue() != null && fieldOptionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+                        String selectField = Objects.requireNonNull(fieldComboBox.getSelectedItem()).toString();
+                        String value = JOptionPane.showInputDialog(null,"請輸入修改內容");
+                        MyDataDAO.updateData(selectDataName,selectField,value);
+                    }
+                }
+
             }
         };
         updateButton.addActionListener(updateListener);
+        //顯示主選單
         frame.setVisible(true);
     }
     private static void showDataInputDialog() {
