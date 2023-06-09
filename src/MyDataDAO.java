@@ -1,12 +1,11 @@
 import ConnectionPack.ConnectionFactory;
 import com.google.gson.*;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,7 +56,7 @@ public class MyDataDAO {
             return false;
         }
 
-    }//輸入的Mydata，物件屬性可以有null了
+    }//輸入的Mydata //物件屬性可以有null了
     static public void deleteData(int id){
         String sql = "DELETE FROM HospitalList WHERE id=?";
         try(Connection conn = ConnectionFactory.getConn())  {
@@ -68,7 +67,7 @@ public class MyDataDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }//done //根據id刪除資料 //todo 需要再包裝
+    }//根據id刪除資料
     static public int deleteDataByName(String name){
         String sql = "DELETE FROM HospitalList WHERE HospitalName=?";
         try(Connection conn = ConnectionFactory.getConn())  {
@@ -81,7 +80,7 @@ public class MyDataDAO {
             e.printStackTrace();
         }
         return 0;
-    } //done //根據名稱刪除資料 //todo 會有重複資料一起被刪除的問題
+    } //根據名稱刪除資料 //todo 會有重複資料一起被刪除的問題
     static public Mydata selectData(int id){
         String sql = "SELECT [ResourceAgency],[HospitalName],[PhoneNumber],[Fax],[Email],[Address],[Website],[xCoordinate],[yCoordinate],[Notes],[LastUpdateTime],[id] FROM HospitalList WHERE id=?";
         try(Connection conn = ConnectionFactory.getConn())  {
@@ -110,8 +109,7 @@ public class MyDataDAO {
         }
         System.out.println("查詢錯誤");
         return null;
-    }//done //根據id查詢資料，將整筆資料返回成Mydata物件
-    //todo 根據欄位名稱查詢資料//先寫HospitalName跟ResourceAgency的模糊查詢
+    }//根據id查詢資料，將整筆資料返回成Mydata物件//根據欄位名稱查詢資料 //todo 先寫HospitalName跟ResourceAgency的模糊查詢
     static public List<Mydata> selectDataByColumn(String columnName,String keyword){
         //todo 用參數傳遞column不管怎麼改都會報錯，先暫時直接連接字串QQ
         String sql = "SELECT [ResourceAgency],[HospitalName],[PhoneNumber],[Fax],[Email],[Address],[Website],[xCoordinate],[yCoordinate],[Notes],[LastUpdateTime],[id] FROM HospitalList Where "+columnName+" LIKE ?";
@@ -143,8 +141,8 @@ public class MyDataDAO {
             return rsList;
         }catch (SQLException e){e.printStackTrace();return null;}
     }
-    static public void updateData(int id,String field,Object value){
-        String sql = "UPDATE HospitalList SET "+field+" = ? WHERE id = ?";
+    static public void updateData(String selectDataName,String field,Object value){
+        String sql = "UPDATE HospitalList SET "+field+" = ? WHERE HospitalName = ?";
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             //若更新日期則嘗試解析格式再導入
@@ -157,7 +155,7 @@ public class MyDataDAO {
                 }catch (ParseException e){e.printStackTrace();}}
             else {
                 pstmt.setObject(1, value);}
-            pstmt.setInt(2,id);
+            pstmt.setString(2,selectDataName);
             //執行更新
             int rowsAffected = pstmt.executeUpdate();
             System.out.println("Updated " + rowsAffected + " rows.");
@@ -187,7 +185,7 @@ public class MyDataDAO {
         }
 
 
-    }
+    }//處理字串後，給套件解析Json字串，並返回JsonArray
     static public void importArrToDatabase(JsonArray jsArr){
         Mydata mdata = new Mydata();
         try {
@@ -210,7 +208,7 @@ public class MyDataDAO {
                 System.out.println("是否成功插入: "+MyDataDAO.insertData(mdata));//把物件丟給插入方法新增到資料庫
             }
         }catch (ParseException e) {System.out.println("時間轉換失敗");e.printStackTrace();}
-    }
+    }//把Json檔案解析後的陣列導入資料庫
     static public List<String> getColumnList(String tableName) {
         List<String> columnNames = new ArrayList<>();
         try (Connection conn = ConnectionFactory.getConn()) {
@@ -291,7 +289,7 @@ public class MyDataDAO {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-    }
+    }//指定資料表全部匯出 //todo 日期輸出跟原本不一致
 /*    static public java.util.Date RocDateStringToAdDate(String str){
         DateTimeFormatter rocdtf=DateTimeFormatter.ofPattern("yyy/MM/dd");
         LocalDate rocDate = LocalDate.parse(str, rocdtf);

@@ -12,33 +12,28 @@ import java.util.Objects;
 
 public class UserInteract {
     public static void main(String[] args) {
- /*        //todo 從網路載入
+        //匯入資料 //todo 從網路載入
+ /*
         String path = "data/data.json";
         if(MyDataDAO.readJsonFile(path) != null){
             MyDataDAO.importArrToDatabase(Objects.requireNonNull(MyDataDAO.readJsonFile(path)));
             System.out.println("導入資料完畢");
         }else {System.out.println("無法導入資料庫");}
 */
-        //GUI
-        //创建主窗口
+        //宣告主窗口
         JFrame frame = new JFrame("主選單");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLayout(new BorderLayout());
-
-        // 创建选项按钮
+        //宣告按鈕
         JButton addButton = new JButton("新增資料");
-
         JButton searchButton = new JButton("查詢");
-        //修改可更新字串、數字、日期(格式yyyy/MM/dd)
-        JButton updateButton = new JButton("修改");
+        JButton updateButton = new JButton("修改");//修改可更新字串、數字、日期(格式yyyy/MM/dd)
         //todo 改為依照條件後讓使用者選擇，在查詢頁面也可以新增按鈕讓使用者刪除
         //todo 透過查詢
         JButton deleteButton = new JButton("刪除");
         JButton exportButton = new JButton("導出資料");
-
-
-        // 添加按钮到主窗口
+        // 添加按鈕
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
         buttonPanel.add(addButton);
         buttonPanel.add(searchButton);
@@ -46,6 +41,7 @@ public class UserInteract {
         buttonPanel.add(deleteButton);
         buttonPanel.add(exportButton);
         frame.add(buttonPanel, BorderLayout.CENTER);
+        //按鈕事件
 //新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能//新增功能
         ActionListener addListener= new ActionListener() {
             @Override
@@ -263,7 +259,7 @@ public class UserInteract {
         inputPanel.getCancelButton().addActionListener(cancelButton);
         //準備完成並顯示視窗
         dialog.setVisible(true);
-    }//屬性輸入視窗 todo 分割出去成單獨class
+    }//全屬性的輸入視窗 todo 分割出去成單獨class
 
 }
 
