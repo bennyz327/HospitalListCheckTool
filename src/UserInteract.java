@@ -76,11 +76,12 @@ public class UserInteract {
                             
                             //渲染結果視窗
                             new DataShowTable(rsList);
-                            
+
+                            //導出查詢結果確認視窗
                             int option = JOptionPane.showConfirmDialog(null, "要導出資料嗎？", "確認", JOptionPane.YES_NO_OPTION);
                             if (option == JOptionPane.YES_OPTION) {
-                            //導出查詢結果
-                            MyDataDAO.exportDataToJsonfile(rsList, "test");
+                                String inputFileName = JOptionPane.showInputDialog(null, "請輸入檔案名稱" );
+                                MyDataDAO.exportDataToJsonfile(rsList, inputFileName);
                             }
                             
                         }else {
