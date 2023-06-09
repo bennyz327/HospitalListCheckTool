@@ -146,14 +146,21 @@ public class MyDataDAO {
         String sql = "UPDATE HospitalList SET "+replaceField+" = ? WHERE HospitalName = ?";
         try (Connection conn = ConnectionFactory.getConn();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            //若更新日期則嘗試解析格式再導入
+            //若更新日期則嘗試解析格式再導入   //加入判斷格式
             //todo 當更改時間之外的欄位時也需要更新LastUpdateTime欄位
             if("LastUpdateTime".equals(field)){
                 try{
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    //國民年轉西元年
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
                     java.util.Date convertDate = sdf.parse(value.toString());
-                    pstmt.setObject(1, convertDate);
-                }catch (ParseException e){e.printStackTrace();}}
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(convertDate);
+                    calendar.add(Calendar.YEAR, 1911);
+                    java.util.Date adDate = calendar.getTime();
+                    Date sqldate = new Date(adDate.getTime());
+
+                    pstmt.setObject(1, adDate);
+                }catch (ParseException|SQLException e){e.printStackTrace();}}
             else {
                 pstmt.setObject(1, value);}
             pstmt.setString(2,selectDataName);
