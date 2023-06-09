@@ -73,7 +73,16 @@ public class UserInteract {
                         List<Mydata> rsList = MyDataDAO.selectDataByColumn(selectedFieldName,key);
                         if(!rsList.isEmpty()){
                             System.out.println("有資料");
+                            
+                            //渲染結果視窗
                             new DataShowTable(rsList);
+                            
+                            int option = JOptionPane.showConfirmDialog(null, "要導出資料嗎？", "確認", JOptionPane.YES_NO_OPTION);
+                            if (option == JOptionPane.YES_OPTION) {
+                            //導出查詢結果
+                            MyDataDAO.exportDataToJsonfile(rsList, "test");
+                            }
+                            
                         }else {
                             JOptionPane.showMessageDialog(dialog, "查無資料！", "錯誤", JOptionPane.ERROR_MESSAGE);
                             dialog.dispose();

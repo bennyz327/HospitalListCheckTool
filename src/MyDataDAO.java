@@ -266,7 +266,6 @@ public class MyDataDAO {
             FileWriter fileWriter = new FileWriter(tableName + ".json");
 
             while (rs.next()) {
-                // 将数据转换为对象
                 Mydata data = new Mydata();
                 data.setResourceAgency(rs.getString("ResourceAgency"));
                 data.setHospitalName(rs.getString("HospitalName"));
@@ -291,6 +290,16 @@ public class MyDataDAO {
             e.printStackTrace();
         }
     }//指定資料表全部匯出 //todo 日期輸出跟原本不一致
+    static public void exportDataToJsonfile(List<Mydata> selectList,String fileName) {
+    	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    	for (Mydata mydata : selectList) {
+    		try(FileWriter fileWriter = new FileWriter(fileName + ".json");){
+    			String json = gson.toJson(mydata);
+                fileWriter.append(json);
+                fileWriter.append("\n");
+    		}catch (IOException e) { /*導出失敗*/}
+		}
+    }
 /*    static public java.util.Date RocDateStringToAdDate(String str){
         DateTimeFormatter rocdtf=DateTimeFormatter.ofPattern("yyy/MM/dd");
         LocalDate rocDate = LocalDate.parse(str, rocdtf);
