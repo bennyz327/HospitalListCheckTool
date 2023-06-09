@@ -1,0 +1,50 @@
+[
+{
+  "resourceAgency": "新竹縣政府",
+  "hospitalName": "臺北榮民總醫院新竹分院",
+  "phoneNumber": "(03)5962134",
+  "fax": "",
+  "email": "",
+  "address": "新竹縣竹東鎮中豐路1段81號",
+  "website": "",
+  "xCoordinate": 0,
+  "yCoordinate": 0,
+  "notes": "",
+  "lastUpdateTime": "5月 5, 2023",
+  "xCoordinateInteger": 0,
+  "yCoordinateInteger": 0
+}
+,
+{
+  "resourceAgency": "新竹縣政府",
+  "hospitalName": "國立臺灣大學醫學院附設醫院新竹臺大分院生醫醫院(竹北院區)",
+  "phoneNumber": "(03)6677600",
+  "fax": "",
+  "email": "",
+  "address": "新竹縣竹北市生醫路一段2號",
+  "website": "",
+  "xCoordinate": 0,
+  "yCoordinate": 0,
+  "notes": "",
+  "lastUpdateTime": "5月 5, 2023",
+  "xCoordinateInteger": 0,
+  "yCoordinateInteger": 0
+}
+,
+{
+  "resourceAgency": "新竹縣政府",
+  "hospitalName": "中國醫藥大學新竹附設醫院",
+  "phoneNumber": "(03)5580558",
+  "fax": "",
+  "email": "",
+  "address": "新竹縣竹北市興隆路一段199號",
+  "website": "",
+  "xCoordinate": 0,
+  "yCoordinate": 0,
+  "notes": "",
+  "lastUpdateTime": "5月 5, 2023",
+  "xCoordinateInteger": 0,
+  "yCoordinateInteger": 0
+}
+,
+]
